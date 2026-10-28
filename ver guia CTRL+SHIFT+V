@@ -1,0 +1,10 @@
+En Visual Studio Code, abre el archivo .md y presiona:
+
+Ctrl + Shift + V
+
+para abrir la vista previa de Markdown.
+
+También puedes usar:
+
+Ctrl + K, V: abre la vista previa al lado del editor.
+En Mac: ⌘ + Shift + V.
