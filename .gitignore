@@ -1,0 +1,12 @@
+# Archivos intermedios de generación de presentaciones (borradores, capturas, inspecciones)
+_build/presentaciones-docentes/
+
+node_modules/
+logs/
+*.log
+.env
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+~$*
