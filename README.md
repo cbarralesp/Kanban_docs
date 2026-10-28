@@ -27,6 +27,7 @@ Presentación de la clase: [C3-Desarrollo-de-Software.pptx](C3-Desarrollo-de-Sof
 | Repositorio | Contenido |
 |---|---|
 | [kanban_backend_base](https://github.com/cbarralesp/kanban_backend_base) | Backend en blanco con `TODO` para completar siguiendo la guía |
+| [kanban_backend](https://github.com/cbarralesp/kanban_backend) | Backend terminado: la referencia para comparar tu trabajo |
 | [kanban-frontend](https://github.com/cbarralesp/kanban-frontend) | Frontend Angular 21 terminado |
 
 ## Regenerar las guías

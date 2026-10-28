@@ -527,10 +527,6 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * ENTITY (el "Model" de MVC): representa la tabla tarea.
- * Java puro: constructor vacío, getters y setters escritos a mano.
- */
 @Entity
 @Table(name = "tarea")
 public class Tarea {
@@ -562,7 +558,6 @@ public class Tarea {
     @Column(name = "actualizada_en", nullable = false)
     private LocalDateTime actualizadaEn;
 
-    /** Constructor vacío: JPA lo exige para crear la entidad al leer de la base. */
     public Tarea() {
     }
 
@@ -599,7 +594,6 @@ public class Tarea {
         return actualizadaEn;
     }
 
-    // ---------- setters (id y fechas de auditoría los maneja JPA, por eso no tienen) ----------
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
@@ -620,7 +614,7 @@ public class Tarea {
         this.fechaLimite = fechaLimite;
     }
 
-    /** Se ejecuta automáticamente justo antes del INSERT. */
+
     @PrePersist
     void antesDeGuardar() {
         LocalDateTime ahora = LocalDateTime.now();
@@ -741,7 +735,6 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-/** DTO de entrada para POST /api/tareas. La tarea siempre nace en POR_HACER. */
 public record CrearTareaRequest(
         @NotBlank(message = "El título es obligatorio")
         @Size(max = 100, message = "El título no puede superar los 100 caracteres")
@@ -792,13 +785,12 @@ Un **record** es una clase **inmutable** que Java completa por ti (constructor, 
 package cl.ipss.kanban.dto;
 
 import cl.ipss.kanban.enums.PrioridadTarea;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-
-/** DTO de entrada para PUT /api/tareas/{id}. El estado no se edita aquí: se cambia con PATCH .../estado. */
 public record ActualizarTareaRequest(
         @NotBlank(message = "El título es obligatorio")
         @Size(max = 100, message = "El título no puede superar los 100 caracteres")
@@ -846,7 +838,6 @@ package cl.ipss.kanban.dto;
 import cl.ipss.kanban.enums.EstadoTarea;
 import jakarta.validation.constraints.NotNull;
 
-/** DTO de entrada para PATCH /api/tareas/{id}/estado: la columna de destino. */
 public record MoverTareaRequest(
         @NotNull(message = "El estado de destino es obligatorio")
         EstadoTarea estado
@@ -888,7 +879,6 @@ import cl.ipss.kanban.enums.PrioridadTarea;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/** DTO de salida: lo que viaja en el JSON hacia Angular (la "View" de MVC en una API REST). */
 public record TareaResponse(
         Long id,
         String titulo,
@@ -1267,11 +1257,10 @@ import cl.ipss.kanban.entity.Tarea;
 import cl.ipss.kanban.enums.EstadoTarea;
 import org.springframework.stereotype.Component;
 
-/** Patrón Mapper: convierte entre DTOs (lo que viaja por HTTP) y la Entity (lo que se guarda). */
 @Component
 public class TareaMapper {
 
-    /** Toda tarea nueva nace en la columna POR_HACER. */
+
     public Tarea aEntidad(CrearTareaRequest r) {
         Tarea entidad = new Tarea();
         entidad.setTitulo(r.titulo().trim());
@@ -1282,7 +1271,6 @@ public class TareaMapper {
         return entidad;
     }
 
-    /** Copia los datos editables sobre una entidad existente (el estado no se toca). */
     public void actualizarEntidad(Tarea entidad, ActualizarTareaRequest r) {
         entidad.setTitulo(r.titulo().trim());
         entidad.setDescripcion(limpiar(r.descripcion()));
@@ -2260,7 +2248,7 @@ npm start
 
 ## Anexo D · Cómo validar tu trabajo contra el proyecto terminado
 
-1. Compara tu carpeta `src/main/java` con [`kanban-backend`](../kanban-backend): mismos paquetes y mismos nombres.
+1. Compara tu carpeta `src/main/java` con [`kanban_backend`](https://github.com/cbarralesp/kanban_backend): mismos paquetes y mismos nombres.
 2. Ejecuta `.\mvnw.cmd test`: debe dar `BUILD SUCCESS`.
 3. Repite la tabla de pruebas del Paso 6 en Swagger.
 4. Levanta el front (Paso 8) y prueba el tablero.

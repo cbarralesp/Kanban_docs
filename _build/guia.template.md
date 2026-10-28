@@ -493,7 +493,7 @@ npm start
 
 ## Anexo D · Cómo validar tu trabajo contra el proyecto terminado
 
-1. Compara tu carpeta `src/main/java` con [`kanban-backend`](../kanban-backend): mismos paquetes y mismos nombres.
+1. Compara tu carpeta `src/main/java` con [`kanban_backend`](https://github.com/cbarralesp/kanban_backend): mismos paquetes y mismos nombres.
 2. Ejecuta `.\mvnw.cmd test`: debe dar `BUILD SUCCESS`.
 3. Repite la tabla de pruebas del Paso 6 en Swagger.
 4. Levanta el front (Paso 8) y prueba el tablero.
