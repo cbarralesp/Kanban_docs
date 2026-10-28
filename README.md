@@ -18,6 +18,7 @@ IPSS · Desarrollo de Software II · Clase 03
 8. [08 · Guía paso a paso de Angular](08-guia-angular-paso-a-paso.md)
 9. [09 · Fundamentos de ingeniería de software](09-fundamentos-ingenieria-software.md)
 10. [10 · Atlas de diagramas del Kanban](10-atlas-diagramas-kanban.md)
+11. [11 · Git: cómo subir tu proyecto a tu repositorio](11-git-subir-proyecto-alumnos.md)
 
 Presentación de la clase: [C3-Desarrollo-de-Software.pptx](C3-Desarrollo-de-Software.pptx).
 
