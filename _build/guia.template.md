@@ -178,7 +178,7 @@ $env:DB_PASSWORD = "kanban"
 .\mvnw.cmd spring-boot:run
 ```
 
-> **Alternativa por terminal:** el proyecto trae [`crear-bd.sql`](../kanban-backend-base/crear-bd.sql), que hace **todo de una vez**: crea (o actualiza) el usuario, crea la base si no existe y da los permisos. Se puede ejecutar varias veces sin errores. Ejecútalo como `postgres` desde la carpeta del proyecto:
+> **Alternativa por terminal:** el proyecto trae [`crear-bd.sql`](https://github.com/cbarralesp/kanban_backend_base/blob/main/crear-bd.sql), que hace **todo de una vez**: crea (o actualiza) el usuario, crea la base si no existe y da los permisos. Se puede ejecutar varias veces sin errores. Ejecútalo como `postgres` desde la carpeta del proyecto:
 >
 > ```powershell
 > psql -U postgres -h localhost -p 5432 -f crear-bd.sql

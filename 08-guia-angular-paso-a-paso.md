@@ -287,8 +287,8 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
     </div>
   `,
   styles: `
-    .fondo { position: fixed; inset: 0; background: rgb(15 23 42 / .55); display: grid; place-items: center; z-index: 40; padding: 1rem; }
-    .dialogo { background: var(--superficie); border-radius: .9rem; padding: 1.5rem; width: min(26rem, 100%); box-shadow: 0 20px 50px rgb(0 0 0 / .3); }
+    .fondo { position: fixed; inset: 0; background: rgb(3 6 14 / .75); display: grid; place-items: center; z-index: 40; padding: 1rem; }
+    .dialogo { background: var(--superficie); border: 1px solid var(--borde); border-radius: .9rem; padding: 1.5rem; width: min(26rem, 100%); box-shadow: 0 20px 50px rgb(0 0 0 / .6); }
     h2 { margin: 0 0 .5rem; font-size: 1.15rem; }
     p { margin: 0 0 1.25rem; color: var(--texto-suave); }
     .acciones { display: flex; justify-content: flex-end; gap: .5rem; }
@@ -708,27 +708,31 @@ export class TareaCard {
 
 .tarjeta {
   background: var(--superficie); border: 1px solid var(--borde); border-radius: .75rem;
-  padding: .75rem .85rem; display: grid; gap: .45rem; cursor: grab;
-  box-shadow: 0 1px 2px rgb(30 27 75 / .06);
+  padding: .8rem .9rem; display: grid; gap: .5rem; cursor: grab;
+  box-shadow: 0 4px 14px rgb(0 0 0 / .35);
+  transition: border-color .15s, transform .15s;
 }
 .tarjeta:active { cursor: grabbing; }
-.tarjeta:hover { border-color: #b9bdf0; }
-.tarjeta.hecha { opacity: .8; }
+.tarjeta:hover { border-color: #3a4766; transform: translateY(-1px); }
+.tarjeta.hecha { opacity: .75; }
 .tarjeta.hecha .titulo { text-decoration: line-through; color: var(--texto-suave); }
 
-.cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
-.titulo { margin: 0; font-size: .95rem; font-weight: 700; overflow-wrap: anywhere; }
-.descripcion { margin: 0; font-size: .82rem; color: var(--texto-suave); overflow-wrap: anywhere; }
+.cabecera { display: grid; gap: .4rem; justify-items: start; }
+.titulo { margin: 0; font-size: 1rem; font-weight: 700; overflow-wrap: anywhere; }
+.descripcion { margin: 0; font-size: .85rem; color: #c3c9d8; overflow-wrap: anywhere; }
 
-.chip { flex: none; padding: .05rem .55rem; border-radius: 999px; font-size: .72rem; font-weight: 700; }
-.prioridad-alta { background: #ffe4e6; color: #9f1239; }
-.prioridad-media { background: #fef3c7; color: #92400e; }
-.prioridad-baja { background: #dcfce7; color: #166534; }
+.chip { padding: .1rem .6rem; border-radius: .35rem; font-size: .75rem; font-weight: 700; }
+.prioridad-alta { background: #be185d; color: #fff; }
+.prioridad-media { background: #f59e0b; color: #1c1300; }
+.prioridad-baja { background: #16a34a; color: #fff; }
 
 .fecha { margin: 0; font-size: .8rem; color: var(--texto-suave); }
-.fecha.vencida { color: #b91c1c; font-weight: 600; }
+.fecha.vencida { color: #fb7185; font-weight: 600; }
 
-.acciones { display: flex; justify-content: space-between; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.acciones {
+  display: flex; justify-content: space-between; align-items: center; gap: .4rem; flex-wrap: wrap;
+  padding-top: .55rem; border-top: 1px solid var(--borde);
+}
 .mover { display: flex; gap: .3rem; }
 ```
 
@@ -968,6 +972,7 @@ export class TableroPage implements OnInit {
   @for (columna of columnas; track columna) {
     <div
       class="columna"
+      [attr.data-estado]="columna"
       [class.activa]="columnaActiva() === columna"
       [class.llena]="columna === 'EN_CURSO' && store.resumen().enCursoLleno"
       (dragover)="alPasarSobre($event, columna)"
@@ -1026,29 +1031,37 @@ export class TableroPage implements OnInit {
 
 <!-- archivo: src/app/features/tareas/pages/tablero.page.css -->
 ```css
-.encabezado { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: .75rem; }
-h1 { margin: 0; font-size: 1.35rem; }
-.sub { margin: 0; color: var(--texto-suave); font-size: .85rem; }
+.encabezado { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--borde); }
+h1 { margin: 0; font-size: 1.6rem; }
+.sub { margin: 0; color: var(--texto-suave); font-size: .9rem; }
 
-.aviso-error { background: #fee2e2; color: #7f1d1d; padding: .6rem .9rem; border-radius: .6rem; margin-bottom: .75rem; }
+.aviso-error { background: rgb(244 63 94 / .12); border: 1px solid var(--peligro); color: #fecdd3; padding: .6rem .9rem; border-radius: .6rem; margin-bottom: .75rem; }
 
 /* minmax(0, 1fr): las columnas se reparten el ancho sin generar scroll lateral */
 .tablero { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .9rem; align-items: start; }
 
+/* cada columna toma su color de acento según data-estado */
+.columna { --acento: var(--por-hacer); }
+.columna[data-estado='EN_CURSO'] { --acento: var(--en-curso); }
+.columna[data-estado='HECHA'] { --acento: var(--hecha); }
+
 .columna {
-  background: #e4e7f5; border: 2px solid transparent; border-radius: .9rem; padding: .7rem;
-  display: grid; gap: .6rem; min-height: 8rem;
+  background: var(--columna); border: 1px solid var(--borde); border-radius: .9rem;
+  display: grid; gap: .6rem; min-height: 9rem; padding: 0 .7rem .7rem;
+  box-shadow: 0 10px 30px rgb(0 0 0 / .35);
 }
-.columna.activa { border-color: var(--primario); background: #dadef6; }
-.columna.llena { background: #fde8d6; }
+.columna.activa { border-color: var(--acento); box-shadow: 0 0 0 1px var(--acento), 0 10px 30px rgb(0 0 0 / .35); }
+.columna.llena { --acento: var(--peligro); }
 
-.columna-cabecera { display: flex; justify-content: space-between; align-items: center; }
-.columna-cabecera h2 { margin: 0; font-size: .95rem; text-transform: uppercase; letter-spacing: .04em; color: var(--oscuro); }
-.contador { background: var(--oscuro); color: #fff; border-radius: 999px; padding: .05rem .65rem; font-size: .8rem; font-weight: 700; }
-.llena .contador { background: #c2410c; }
-.limite { margin: 0; font-size: .8rem; font-weight: 600; color: #9a3412; }
+.columna-cabecera {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .75rem .15rem .6rem; border-bottom: 2px solid var(--acento);
+}
+.columna-cabecera h2 { margin: 0; font-size: .95rem; text-transform: uppercase; letter-spacing: .05em; color: var(--texto); }
+.contador { color: var(--acento); font-weight: 800; font-size: .95rem; }
+.limite { margin: 0; font-size: .8rem; font-weight: 600; color: #fda4af; }
 
-.lista { display: grid; gap: .55rem; }
+.lista { display: grid; gap: .6rem; }
 .vacia { margin: 0; text-align: center; color: var(--texto-suave); font-size: .85rem; padding: 1rem 0; }
 
 @media (max-width: 800px) {
@@ -1098,20 +1111,33 @@ export const routes: Routes = [
 
 ## Paso 11 · Estilos globales
 
-Diseño propio, con paleta índigo (distinta del rojo de Bip!):
+Diseño propio con **tema oscuro** (distinto del rojo de Bip!). Los colores viven en variables de `:root`, incluido el acento de cada columna:
 
 <!-- archivo: src/styles.css -->
 ```css
-/* Estilos globales: variables de diseño + clases reutilizables (botones, campos y avisos). */
+/* Estilos globales: tema oscuro. Variables de diseño + clases reutilizables (botones, campos y avisos). */
 :root {
-  --primario: #4f46e5;
-  --primario-oscuro: #4338ca;
-  --oscuro: #1e1b4b;
-  --fondo: #eef0f7;
-  --superficie: #ffffff;
-  --borde: #dfe2ee;
-  --texto: #1e1b4b;
-  --texto-suave: #6b7094;
+  color-scheme: dark;                 /* controles nativos (fecha, select, scroll) en modo oscuro */
+
+  --fondo: #0b0f1a;
+  --barra: #0e1424;
+  --columna: #111827;
+  --superficie: #182033;              /* tarjetas y diálogos */
+  --superficie-alta: #1f2940;         /* hover y campos */
+  --borde: #273147;
+  --texto: #e6e9f2;
+  --texto-suave: #8f98ad;
+
+  --primario: #22c5d6;
+  --primario-oscuro: #19a7b6;
+  --degradado: linear-gradient(90deg, #14b8a6, #6366f1);
+
+  /* acento de cada columna */
+  --por-hacer: #22d3ee;
+  --en-curso: #ec4899;
+  --hecha: #f59e0b;
+
+  --peligro: #f43f5e;
 }
 
 * { box-sizing: border-box; }
@@ -1119,33 +1145,34 @@ Diseño propio, con paleta índigo (distinta del rojo de Bip!):
 body {
   margin: 0;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  background: var(--fondo);
+  background: radial-gradient(1200px 600px at 20% -10%, #18223a 0%, var(--fondo) 60%) fixed, var(--fondo);
   color: var(--texto);
   line-height: 1.5;
+  min-height: 100vh;
 }
 
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   padding: .5rem .95rem; border-radius: .6rem; border: 1px solid var(--borde);
-  background: var(--superficie); color: var(--texto);
+  background: var(--superficie-alta); color: var(--texto);
   font: inherit; font-weight: 600; font-size: .9rem; text-decoration: none; cursor: pointer;
 }
-.btn:hover { background: #f5f6fc; }
+.btn:hover { background: #28344f; }
 .btn:focus-visible, .campo:focus-visible { outline: 2px solid var(--primario); outline-offset: 2px; }
-.btn:disabled { opacity: .5; cursor: not-allowed; }
-.btn-primario { background: var(--primario); border-color: var(--primario); color: #fff; }
-.btn-primario:hover { background: var(--primario-oscuro); }
-.btn-peligro { background: #dc2626; border-color: #dc2626; color: #fff; }
-.btn-peligro:hover { background: #b91c1c; }
-.btn-peligro-suave { color: #b91c1c; }
-.btn-peligro-suave:hover { background: #fef2f2; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn-primario { background: var(--degradado); border-color: transparent; color: #fff; box-shadow: 0 6px 18px rgb(34 197 214 / .25); }
+.btn-primario:hover { filter: brightness(1.1); background: var(--degradado); }
+.btn-peligro { background: var(--peligro); border-color: var(--peligro); color: #fff; }
+.btn-peligro:hover { background: #e11d48; }
+.btn-peligro-suave { color: #fb7185; }
+.btn-peligro-suave:hover { background: rgb(244 63 94 / .12); }
 .btn-chico { padding: .2rem .55rem; font-size: .8rem; }
 
 .campo {
-  width: 100%; padding: .5rem .75rem; border-radius: .6rem; border: 1px solid #c7cbe0;
-  background: var(--superficie); color: var(--texto); font: inherit;
+  width: 100%; padding: .5rem .75rem; border-radius: .6rem; border: 1px solid var(--borde);
+  background: var(--columna); color: var(--texto); font: inherit;
 }
-.campo.ng-invalid.ng-touched { border-color: #dc2626; }
+.campo.ng-invalid.ng-touched { border-color: var(--peligro); }
 
 /* ---- Avisos (toast) ---- */
 .toasts {
@@ -1155,9 +1182,9 @@ body {
 .toast {
   display: flex; align-items: center; justify-content: space-between; gap: .75rem;
   padding: .75rem 1rem; border-radius: .6rem;
-  background: #14532d; color: #fff; box-shadow: 0 8px 24px rgb(0 0 0 / .25);
+  background: #0f5132; color: #fff; border: 1px solid #198754; box-shadow: 0 8px 24px rgb(0 0 0 / .5);
 }
-.toast-error { background: #7f1d1d; }
+.toast-error { background: #5c1a26; border-color: var(--peligro); }
 .toast-cerrar { background: none; border: 0; color: inherit; font-size: 1rem; cursor: pointer; line-height: 1; }
 ```
 

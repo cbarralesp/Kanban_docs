@@ -180,7 +180,7 @@ Formulario reactivo en un diálogo. Las validaciones **reflejan las del DTO**: t
 
 ## Paso 11 · Estilos globales
 
-Diseño propio, con paleta índigo (distinta del rojo de Bip!):
+Diseño propio con **tema oscuro** (distinto del rojo de Bip!). Los colores viven en variables de `:root`, incluido el acento de cada columna:
 
 {{NG:src/styles.css}}
 
